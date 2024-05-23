@@ -26,63 +26,72 @@ public class Main {
             Scanner scanner = new Scanner(System.in);
 
             System.out.println("Enter currency exchange option: ");
-            int exchangeOption = Integer.parseInt(scanner.nextLine());
 
-            String fromCurrency;
-            String toCurrency;
-            switch (exchangeOption) {
-                case 1:
-                    fromCurrency = "USD";
-                    toCurrency = "ARS";
-                    break;
-                case 2:
-                    fromCurrency = "ARS";
-                    toCurrency = "USD";
-                    break;
-                case 3:
-                    fromCurrency = "USD";
-                    toCurrency = "BRL";
-                    break;
-                case 4:
-                    fromCurrency = "BRL";
-                    toCurrency = "USD";
-                    break;
-                case 5:
-                    fromCurrency = "USD";
-                    toCurrency = "COP";
-                    break;
-                case 6:
-                    fromCurrency = "COP";
-                    toCurrency = "USD";
-                    break;
-                case 7:
-                    exit = 1;
-                    fromCurrency = null;
-                    toCurrency = null;
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected currency exchange option: " + exchangeOption);
-            }
+            try {
+                int exchangeOption = Integer.parseInt(scanner.nextLine());
 
-            if (exchangeOption != 7) {
-                CurrencyExchangeRequest request = new CurrencyExchangeRequest();
-                CurrencyExchangeRate exchange = request.currencyExchange(fromCurrency, toCurrency);
+                String fromCurrency;
+                String toCurrency;
+                switch (exchangeOption) {
+                    case 1:
+                        fromCurrency = "USD";
+                        toCurrency = "ARS";
+                        break;
+                    case 2:
+                        fromCurrency = "ARS";
+                        toCurrency = "USD";
+                        break;
+                    case 3:
+                        fromCurrency = "USD";
+                        toCurrency = "BRL";
+                        break;
+                    case 4:
+                        fromCurrency = "BRL";
+                        toCurrency = "USD";
+                        break;
+                    case 5:
+                        fromCurrency = "USD";
+                        toCurrency = "COP";
+                        break;
+                    case 6:
+                        fromCurrency = "COP";
+                        toCurrency = "USD";
+                        break;
+                    case 7:
+                        exit = 1;
+                        fromCurrency = null;
+                        toCurrency = null;
+                        break;
+                    default:
+                        fromCurrency = null;
+                        toCurrency = null;
+                        break;
+                }
 
-                System.out.println("The current exchange rate is: " + exchange.conversion_rate() + "\n");
+                if (exchangeOption >=1 && exchangeOption <= 6) {
+                    CurrencyExchangeRequest request = new CurrencyExchangeRequest();
+                    CurrencyExchangeRate exchange = request.currencyExchange(fromCurrency, toCurrency);
 
-                System.out.println("How much " + fromCurrency + " do you want to convert? ");
-                Double total = Double.valueOf(scanner.nextLine());
+                    System.out.println("The current exchange rate is: " + exchange.conversion_rate() + "\n");
 
-                double newTotal = total * exchange.conversion_rate();
+                    System.out.println("How much " + fromCurrency + " do you want to convert? ");
+                    Double total = Double.valueOf(scanner.nextLine());
 
-                System.out.println("The exchange from " +
-                        total +
-                        " [" + fromCurrency + "]" +
-                        " is " +
-                        newTotal +
-                        " [" + toCurrency + "]" + "\n");
-            } else {
-                System.out.println("Thank you for using the currency exchange converter!\n");
+                    double newTotal = total * exchange.conversion_rate();
+
+                    System.out.println("The exchange from " +
+                            total +
+                            " [" + fromCurrency + "]" +
+                            " is " +
+                            newTotal +
+                            " [" + toCurrency + "]" + "\n");
+                } else if (exchangeOption == 7) {
+                    System.out.println("Thank you for using the currency exchange converter!\n");
+                } else {
+                    System.out.println("The selected option (" + exchangeOption + ") is invalid!\n");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("The selected option " + e.getMessage().toLowerCase() + ", is invalid!\n");
             }
         }
     }
