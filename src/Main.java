@@ -1,27 +1,35 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("*******************************************");
 
-        System.out.println("Welcome to the currency exchange converter!\n");
+        System.out.println("Welcome to the currency exchange converter!");
+
+        List<Exchange> exchanges = new ArrayList<>();
 
         int exit = 0;
         while (exit != 1) {
 
-            System.out.println("*******************************************");
-            System.out.println("Select one currency exchange from the list below:\n" +
-                    "1) USD =>> ARS\n" +
-                    "2) ARS =>> USD\n" +
-                    "3) USD =>> BRL\n" +
-                    "4) BRL =>> USD\n" +
-                    "5) USD =>> COP\n" +
-                    "6) COP =>> USD\n" +
-                    "7) Exit \n\n" +
-                    "USD: United States Dollar\n" +
-                    "ARS: Argentine Peso\n" +
-                    "BRL: Brazilian Real\n" +
-                    "COP: Colombian Peso\n");
+            System.out.println("\n*******************************************");
+            System.out.println("""
+                    Select one currency exchange from the list below:
+                    1) USD =>> ARS
+                    2) ARS =>> USD
+                    3) USD =>> BRL
+                    4) BRL =>> USD
+                    5) USD =>> COP
+                    6) COP =>> USD
+                    7) Exit
+                    8) Show exchanges log
+
+                    USD: United States Dollar
+                    ARS: Argentine Peso
+                    BRL: Brazilian Real
+                    COP: Colombian Peso
+                    """);
 
             Scanner scanner = new Scanner(System.in);
 
@@ -70,28 +78,33 @@ public class Main {
 
                 if (exchangeOption >=1 && exchangeOption <= 6) {
                     CurrencyExchangeRequest request = new CurrencyExchangeRequest();
-                    CurrencyExchangeRate exchange = request.currencyExchange(fromCurrency, toCurrency);
+                    CurrencyExchangeRate exchangeRate = request.currencyExchange(fromCurrency, toCurrency);
 
-                    System.out.println("The current exchange rate is: " + exchange.conversion_rate() + "\n");
+                    System.out.println("The current exchange rate is: " + exchangeRate.conversion_rate());
 
                     System.out.println("How much " + fromCurrency + " do you want to convert? ");
                     Double total = Double.valueOf(scanner.nextLine());
 
-                    double newTotal = total * exchange.conversion_rate();
+                    double newTotal = total * exchangeRate.conversion_rate();
 
                     System.out.println("The exchange from " +
                             total +
                             " [" + fromCurrency + "]" +
                             " is " +
                             newTotal +
-                            " [" + toCurrency + "]" + "\n");
+                            " [" + toCurrency + "]");
+
+                    Exchange exchange = new Exchange(fromCurrency,toCurrency,total,newTotal);
+                    exchanges.add(exchange);
                 } else if (exchangeOption == 7) {
                     System.out.println("Thank you for using the currency exchange converter!\n");
+                } else if (exchangeOption == 8) {
+                    exchanges.forEach(System.out::println);
                 } else {
-                    System.out.println("The selected option (" + exchangeOption + ") is invalid!\n");
+                    System.out.println("The selected option (" + exchangeOption + ") is invalid!");
                 }
             } catch (IllegalArgumentException e) {
-                System.out.println("The selected option " + e.getMessage().toLowerCase() + ", is invalid!\n");
+                System.out.println("The selected option " + e.getMessage().toLowerCase() + ", is invalid!");
             }
         }
     }
